@@ -74,6 +74,6 @@
 
 ## Setup
 
+- Run in local only.
 - Install the dependencies by running npm install
-
 - Start the app by running npm run dev
