@@ -94,7 +94,7 @@ export function BookingsTable({ bookings, onRefresh }: BookingsTableProps) {
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon" disabled={cancellingBooking === booking.id}>
-                          <MoreVertical className="h-4 w-4" />
+                          <MoreVertical className="h-4 w-4 rotate-90" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-48">
