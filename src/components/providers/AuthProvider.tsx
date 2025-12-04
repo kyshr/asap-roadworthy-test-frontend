@@ -1,14 +1,36 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
-import Cookies from "js-cookie";
 
 const publicRoutes = ["/login", "/register"];
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading, checkAuth } = useAuthStore();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    // Check authentication status on mount
+    checkAuth();
+  }, [checkAuth]);
+
+  useEffect(() => {
+    // Handle route protection
+    if (!isLoading) {
+      const isPublicRoute = publicRoutes.includes(pathname);
+
+      if (!isAuthenticated && !isPublicRoute) {
+        // Store the intended destination
+        sessionStorage.setItem("redirectAfterLogin", pathname);
+        router.push("/login");
+      } else if (isAuthenticated && isPublicRoute) {
+        // Redirect authenticated users away from login/register pages
+        router.push("/");
+      }
+    }
+  }, [isAuthenticated, isLoading, pathname, router]);
 
   if (isLoading) {
     return (

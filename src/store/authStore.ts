@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { IUser } from "@/types";
 import { authApi } from "@/lib/api/auth";
-import Cookies from "js-cookie";
 
 interface AuthStore {
   user: IUser | null;
@@ -30,17 +29,12 @@ export const useAuthStore = create<AuthStore>((set) => ({
   },
 
   checkAuth: async () => {
-    const token = Cookies.get("token");
-    if (!token) {
-      set({ user: null, isAuthenticated: false, isLoading: false });
-      return;
-    }
-
     try {
       const user = await authApi.getMe();
       set({ user, isAuthenticated: true, isLoading: false });
     } catch (error) {
-      Cookies.remove("token");
+      // If getMe fails, user is not authenticated
+      // httpOnly cookies are managed server-side
       set({ user: null, isAuthenticated: false, isLoading: false });
     }
   },
