@@ -42,4 +42,12 @@ export const authApi = {
     const response = await api.get<{ success: boolean; data: { user: IUser } }>("/auth/me");
     return response.data.data.user;
   },
+
+  updatePassword: async (data: {
+    currentPassword: string;
+    newPassword: string;
+  }): Promise<{ success: boolean; message: string }> => {
+    const response = await api.put<{ success: boolean; message: string }>("/auth/update-password", data);
+    return response.data;
+  },
 };
